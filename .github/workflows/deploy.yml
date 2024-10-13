@@ -7,25 +7,17 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
-    # Checkout the code from the repository
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # Log in to Azure using the provided credentials
     - name: Azure Login
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    # Build step if any (for frontend you may not need one, but can be added here)
-
-    # Deploy static assets to Azure Storage
     - name: Deploy to Azure Storage
       run: |
-        az storage blob upload-batch -d '$web' -s './Frontend' \
-        --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }} \
-        --account-key ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }} \
-        --auth-mode key
+        az storage blob upload-batch -d '$web' -s './Frontend' --account-name ${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }} --auth-mode login
